@@ -1,0 +1,74 @@
+spring:
+  datasource:
+    username: root
+    password: root
+    url: jdbc:mysql://192.168.56.10:3306/gumall_oms
+    driver-class-name: com.mysql.jdbc.Driver
+#  cloud:
+#    nacos:
+#      discovery:
+#        server-addr: 127.0.0.1:8848
+#  application:
+#    name: gumall-order
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  global-config:
+    db-config:
+      id-type: auto
+server:
+  port: 9001
+
+#seata配置
+#seata:
+#  enabled: true
+#  enableAutoDataSourceProxy: false
+
+#整合sharding proxy配置多數據源。dao、entity都要改package名稱
+#spring:
+#  autoconfigure:
+#    #     去掉Druid 配置   //第一部分点
+#    exclude: com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure
+#  datasource:
+#    # 多数据源
+#    dynamic:
+#      seata: true
+#      seata-mode: at
+#      # 连接池配置，同理使用[druid]时也需要配置在当前位置，否则会配置无法生效或报错，hikari地址：https://github.com/brettwooldridge/HikariCP
+#      hikari:
+#        # 从池返回的连接的默认自动提交行为，默认值：true
+#        is-auto-commit: true
+#        # 一个连接idle（闲置）状态的最大时长（毫秒），超时则被释放（retired），缺省:10分钟
+#        idle-timeout: 600000
+#        # 等待连接池分配连接的最大时长（毫秒），超过这个时长还没可用的连接则发生SQLException，最低可接受的连接超时为250 ms。 缺省:30秒
+#        connection-timeout: 30000
+#        # 控制池中连接的最长存活时间，默认值:1800000 (30分钟)
+#        max-lifetime: 1800000
+#        # 最小数量的空闲连接，如果空闲连接数低于此值，并且池中的总连接数小于maximumPoolSize，HikariCP将尽最大努力快速高效地添加额外的连接。
+#        # 为了获得最佳性能和对峰值需求的响应能力，我们建议不设置该值，默认值:与maxPoolSize相同
+#        min-idle: 20
+#        #  池中最大连接数，包括闲置和使用中的连接，默认为10，实际配置需要根据环境，推荐公式 connections = ((core_count * 2) + effective_spindle_count)
+#        max-pool-size: 20
+#      # 设置默认的数据源或者数据源组,默认值即为account
+#      primary: one
+#      # 严格匹配数据源,默认false. true未匹配到指定数据源时抛异常,false使用默认数据源
+#      strict: false
+#      # 数据源
+#      datasource:
+#        # 名称
+#        one:
+#          # 类型=》Hikari
+#          type: com.zaxxer.hikari.HikariDataSource
+#          # 驱动名称
+#          driver-class-name: com.mysql.jdbc.Driver
+#          # 地址
+#          url: jdbc:mysql://192.168.56.10:3306/gumall_oms?useSSL=false
+#          # 连接用户名
+#          username: root
+#          # 连接密码
+#          password: root
+#        two:
+#          type: com.zaxxer.hikari.HikariDataSource
+#          driver-class-name: com.mysql.jdbc.Driver
+#          url: jdbc:mysql://localhost:3388/sharding_db?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Hongkong
+#          username: root
+#          password: root

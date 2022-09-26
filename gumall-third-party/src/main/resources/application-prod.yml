@@ -1,0 +1,16 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: nacos-service.gumall:8848
+    alicloud:
+      access-key: youraccess-key
+      secret-key: yoursecret-key
+      oss:
+        endpoint: oss-cn-hongkong.aliyuncs.com
+        bucket: yourbucket
+
+  application:
+    name: gumall-third-party
+server:
+  port: 8080

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false">
+	<!--日志文件主目录：这里${user.home}为当前服务器用户主目录-->
+	<property name="LOG_HOME" value="${LOG_PATH:-logs}"/>
+	<!--日志文件名称：这里spring.application.name表示工程名称-->
+	<springProperty scope="context" name="APP_NAME" source="spring.application.name"/>
+
+	<!--默认配置-->
+	<include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+	<!--配置控制台(Console)-->
+	<include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+	<!--配置日志文件(File)-->
+<!--	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+<!--		&lt;!&ndash;设置策略&ndash;&gt;-->
+<!--		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
+<!--			&lt;!&ndash;日志文件路径：这里%d{yyyyMMdd}表示按天分类日志&ndash;&gt;-->
+<!--			<FileNamePattern>${LOG_HOME}/%d{yyyyMMdd}/${APP_NAME}.log</FileNamePattern>-->
+<!--			&lt;!&ndash;日志保留天数&ndash;&gt;-->
+<!--			<MaxHistory>15</MaxHistory>-->
+<!--		</rollingPolicy>-->
+<!--		&lt;!&ndash;设置格式&ndash;&gt;-->
+<!--		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">-->
+<!--			&lt;!&ndash;格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符&ndash;&gt;-->
+<!--			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>-->
+<!--			&lt;!&ndash; 或者使用默认配置 &ndash;&gt;-->
+<!--			&lt;!&ndash;<pattern>${FILE_LOG_PATTERN}</pattern>&ndash;&gt;-->
+<!--			<charset>utf8</charset>-->
+<!--		</encoder>-->
+<!--		&lt;!&ndash;日志文件最大的大小&ndash;&gt;-->
+<!--		<triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">-->
+<!--			<MaxFileSize>100MB</MaxFileSize>-->
+<!--		</triggeringPolicy>-->
+<!--	</appender>-->
+	<!--ELK日志收集-->
+	<appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+		<destination>192.168.56.10:5044</destination>
+		<!-- encoder必须配置,有多种可选 -->
+		<encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder">
+			<customFields>{"APP_NAME":"${APP_NAME}"}</customFields>
+		</encoder>
+	</appender>
+
+	<root level="INFO">
+		<!--将日志输出到文件-->
+<!--		<appender-ref ref="FILE"/>-->
+		<!--将日志输出到控制台-->
+		<appender-ref ref="CONSOLE"/>
+		<!--将日志输出到logstash-->
+		<appender-ref ref="LOGSTASH"/>
+	</root>
+	<!-- 子节点向上级传递 局部日志级别-->
+	<logger level="DEBUG" name="com.xyz.gumall"/>
+	<logger level="WARN" name="com.alibaba.nacos"/>
+
+	<!-- 多环境配置 按照active profile选择分支 -->
+	<springProfile name="dev">
+		<!--root节点 全局日志级别，用来指定最基础的日志输出级别-->
+		<root level="INFO">
+			<appender-ref ref="FILE"/>
+			<appender-ref ref="CONSOLE"/>
+		</root>
+		<!-- 子节点向上级传递 局部日志级别-->
+		<logger level="DEBUG" name="com.xyz.gumall"/>
+		<logger level="WARN" name="com.alibaba.nacos"/>
+	</springProfile>
+
+	<springProfile name="prod">
+		<root level="INFO">
+			<appender-ref ref="FILE"/>
+		</root>
+		<!-- 子节点向上级传递 局部日志级别-->
+		<logger level="DEBUG" name="com.baomidou.mybatisplus"/>
+		<logger level="WARN" name="com.alibaba.nacos"/>
+	</springProfile>
+</configuration>

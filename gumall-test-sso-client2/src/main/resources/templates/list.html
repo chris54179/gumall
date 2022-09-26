@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>employees </title>
+</head>
+<body>
+    <h1>welcome:[[${session.loginUser}]]</h1>
+<ul>
+    <li th:each="emp:${emps}">name:[[${emp}]]</li>
+</ul>
+</body>
+</html>

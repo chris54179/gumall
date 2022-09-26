@@ -1,0 +1,89 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        #        - id: test_route
+        #          uri: https://www.baidu.com
+        #          predicates:
+        #            - Query=url,baidu
+        #        - id: qq_route
+        #          uri: https://www.qq.com
+        #          predicates:
+        #            - Query=url,qq
+
+        - id: product_route
+          uri: lb://gumall-product
+          predicates:
+            - Path=/api/product/**,/hello
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
+
+        - id: coupon_route
+          uri: lb://gumall-coupon
+          predicates:
+            - Path=/api/coupon/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
+
+        - id: third_party_route
+          uri: lb://gumall-third-party
+          predicates:
+            - Path=/api/thirdparty/**
+          filters:
+            - RewritePath=/api/thirdparty/(?<segment>.*),/$\{segment}
+
+        - id: member_route
+          uri: lb://gumall-member
+          predicates:
+            - Path=/api/member/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
+
+        - id: ware_route
+          uri: lb://gumall-ware
+          predicates:
+            - Path=/api/ware/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
+
+        - id: admin_route
+          uri: lb://renren-fast
+          predicates:
+            - Path=/api/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/renren-fast/$\{segment}
+
+        - id: gumall_host_route
+          uri: lb://gumall-product
+          predicates:
+            - Host=gumall.com,item.gumall.com
+
+        - id: gumall_search_route
+          uri: lb://gumall-search
+          predicates:
+            - Host=search.gumall.com
+
+        - id: gumall_auth_route
+          uri: lb://gumall-auth-server
+          predicates:
+            - Host=auth.gumall.com
+
+        - id: gumall_cart_route
+          uri: lb://gumall-cart
+          predicates:
+            - Host=cart.gumall.com
+
+        - id: gumall_order_route
+          uri: lb://gumall-order
+          predicates:
+            - Host=order.gumall.com
+
+        - id: gumall_member_route
+          uri: lb://gumall-member
+          predicates:
+            - Host=member.gumall.com
+
+        - id: gumall_seckill_route
+          uri: lb://gumall-seckill
+          predicates:
+            - Host=seckill.gumall.com
